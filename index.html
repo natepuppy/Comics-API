@@ -1,15 +1,58 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="/styles.css"/>
+    <link rel="stylesheet" href="styles.css"/>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
     <title>XKCD Browser</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   </head>
   <body>
     <div id="app">
-      <h1>XKCD Browser</h1>
+        <h1>XKCD Browser</h1>
+        <p>
+            <button v-on:click="previousComic">Previous</button>
+            <button v-on:click="nextComic">Next</button>
+        </p>
+
+        <p>
+            <button v-on:click="firstComic">First</button>
+            <button v-on:click="lastComic">Last</button>
+        </p>
+
+        <p><button v-on:click="randomComic">Random</button></p>
+
+        <div v-if="loading">
+            <p>Loading...</p>
+        </div>
+
+        <div v-else>
+            <h2>{{current.safe_title}}</h2>
+            <img v-bind:src="current.img" v-bind:alt="current.alt">
+            <p><i># {{number}}, drawn on {{current.day}}, {{month}}, {{current.year}}</i></p>
+            <star-rating @rating-selected ="setRating" v-bind:increment="0.5" v-bind:max-rating="5" active-color="#f00" v-bind:show-rating="false">
+            </star-rating>
+            <h4 v-if="ratings[number] !== undefined"><i>Average rating: {{ratings[number].average}}</i></h4>
+        </div>
+
+        <h3>Add a Comment</h3>
+        <form v-on:submit.prevent="addComment">
+            <input v-model="addedName" placeholder="Name"></p>
+            <textarea v-model="addedComment"></textarea>
+            <br/>
+            <button type="submit">Comment</button>
+        </form>
+
+        <h3>Commments</h3>
+        <div v-for="comment in comments[number]">
+            <hr>
+            <p>{{comment.text}}</p>
+            <p><i>-- {{comment.author}}</i></p>
+            <h4><i>{{comment.timeOfComment}}</i></h4>
+        </div>
+
+        <script src="https://unpkg.com/vue-star-rating/dist/star-rating.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+        <script src="/script.js"></script>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-    <script src="/script.js"></script>
   </body>
 </html>
